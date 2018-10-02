@@ -1,0 +1,1383 @@
+{
+    "openapi": "3.0.0-rc2",
+    "x-origin": [{
+        "url": "https://gstock.sg/v2/swagger.json",
+        "format": "swagger",
+        "version": "2.0",
+        "converter": {
+            "url": "https://github.com/mermade/swagger2openapi",
+            "version": "2.2.0"
+        }
+    }],
+    "info": {
+        "title": "Gstock API",
+        "version": "3.0.0",
+        "description": "Gstock API under development",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.example.com/support",
+            "email": "davidtseng1992@hotmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [{
+        "url": "{schemes}://{host}/{endpoints}",
+        "description": "Admin server",
+        "variables": {
+            "host": {
+                "enum": [
+                    "localhost",
+                    "gstock.sg"
+                ],
+                "default": "gstock.sg"
+            },
+            "schemes": {
+                "enum": [
+                    "https",
+                    "http"
+                ],
+                "default": "https"
+            },
+            "endpoints": {
+                "enum": [
+                    "admin.gstock",
+                    "buyer.gstock",
+                    "merchant.gstock"
+                ],
+                "default": "https"
+            }
+        }
+    }],
+    "security": [{
+        "jwt_auth": []
+    }],
+    "tags": [{
+            "name": "User",
+            "description": "API endpoints for user function."
+        },
+        {
+            "name": "Merchant",
+            "description": "API endpoints for merchant function."
+        },
+        {
+            "name": "Buyer",
+            "description": "API endpoints for buyer function."
+        },
+        {
+            "name": "Product",
+            "description": "API endpoints for product function."
+        },
+        {
+            "name": "Attribute",
+            "description": "API endpoints for attribute function."
+        }
+    ],
+    "paths": {
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login a buyer or merchant.",
+                "description": "Provide user name and password to login.",
+                "operationId": "Login user",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login",
+                                "description": "Login a user.",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "User id."
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "description": "JWT token to be included in auth header"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error description."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Regsiter an account",
+                "description": "Regsiter an account",
+                "operationId": "Register a user",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Register",
+                                "description": "Register a user.",
+                                "required": true
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "registered"
+                    },
+                    "409": {
+                        "description": "Account existed"
+                    }
+                }
+            }
+        },
+        "/user/forgot/email": {
+            "post": {
+                "description": "Send forgot email to user.",
+                "summary": "Send forgot email to user.",
+                "operationId": "forgot",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Forgot",
+                                "description": "Email to send"
+                            }
+                        }
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User updated!"
+                    }
+                }
+            }
+        },
+        "/user/account/detail": {
+            "get": {
+                "description": "Authentication required. Get authenticated user detail.",
+                "summary": "Get account detail",
+                "operationId": "getAccountDetail",
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User profile!"
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }]
+            },
+            "put": {
+                "description": "Update a user profile",
+                "summary": "Update an account",
+                "operationId": "Update a user",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetail",
+                                "description": "User details to be updated"
+                            }
+                        }
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User updated!"
+                    }
+                }
+            }
+        },
+        "/user/account/reset": {
+            "post": {
+                "description": "Authentication required. Reset password.",
+                "summary": "Reset password.",
+                "operationId": "reset",
+                "tags": [
+                    "User"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserResetPassword",
+                                "description": "Old password and new password"
+                            }
+                        }
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User updated!"
+                    }
+                }
+            }
+        },
+        "/merchant/product": {
+            "get": {
+                "description": "Get products belong to a merchant",
+                "operationId": "merchantGetProduct",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                        "$ref": "#/components/parameters/pageParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productNameParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productPriceLowParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productPriceHighParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productCategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productProductIdParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User updated!"
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }]
+            },
+            "post": {
+                "description": "Post a new product with basic detail.",
+                "operationId": "merchantCreateProduct",
+                "tags": [
+                    "Merchant"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StartProductCreation"
+                            }
+                        }
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Product created!"
+                    },
+                    "409": {
+                        "description": "Product name exists!"
+                    }
+                }
+            }
+        },
+        "/merchant/product/delete/{productId}": {
+            "post": {
+                "description": "Delete a product give productId belong to a merchant",
+                "operationId": "merchantGetProduct",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User updated!"
+                    }
+                },
+                "security": [{
+                    "jwt_auth": []
+                }]
+            }
+        },
+        "/merchant/product/{productId}": {
+            "put": {
+                "description": "Update a product detail by productId.",
+                "operationId": "merchantUpdateProduct",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BaseProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product created!"
+                    },
+                    "409": {
+                        "description": "Product name exists!"
+                    }
+                }
+            }
+        },
+        "/merchant/variant/{productId}": {
+            "post": {
+                "description": "Create a product variant given product id. You can submit a single object or an array of object.",
+                "operationId": "merchantCreateVariant",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VariantDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a product variant given variantId",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VariantDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/merchant/variant/option/{productId}": {
+            "get": {
+                "description": "Get a product variant's all options and",
+                "operationId": "merchantGetAllVariantOptions",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Options!"
+                    }
+                }
+            }
+        },
+        "/merchant/variant/delete": {
+            "post": {
+                "description": "Delete an existing product variant given variant ID.",
+                "operationId": "merchantDeleteVariant",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [],
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductVariantID"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Options!"
+                    }
+                }
+            }
+        },
+        "/merchant/thumbnail/delete/{productId}": {
+            "post": {
+                "description": "Delete all product picture given a productId",
+                "operationId": "merchantRemoveProductImage",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "security": [{
+                    "jwt_auth": []
+                }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductImagesName"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant!"
+                    }
+                }
+            }
+        },
+        "/merchant/thumbnail/{productId}": {
+            "get": {
+                "description": "Get product images name.",
+                "operationId": "merchantGetImageUrl",
+                "tags": [
+                    "Merchant"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdPath"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Images"
+                    }
+                }
+            }
+        },
+        "/product/product": {
+            "get": {
+                "description": "Get single product category.",
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [{
+                    "$ref": "#/components/parameters/productProductIdParam"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/product/list": {
+            "get": {
+                "description": "Get a product listing given filter. Product image url is {baseUrl}/{productId}/{imageName}",
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [{
+                        "$ref": "#/components/parameters/pageParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productNameParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productPriceLowParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productPriceHighParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productCategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productProductIdParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/productDetailSelectParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/product/category": {
+            "get": {
+                "description": "Get all product category.",
+                "tags": [
+                    "Product"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/admin/variant_options": {
+            "get": {
+                "description": "Get an attribute's options given attribute title or the option given its option name.",
+                "tags": [
+                    "Attribute"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create an attribute with title",
+                "tags": [
+                    "Attribute"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttributeDetail",
+                                "value": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "description": "Attreibute option values",
+                                    "example": [
+                                        "s",
+                                        "m",
+                                        "l"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing attribute's title and options name or value.",
+                "tags": [
+                    "Attribute"
+                ],
+                "parameters": [{
+                        "$ref": "#/components/parameters/attributeTitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/attributeOptionNameParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/attributeOptionValueParam"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AttributeDetail"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/merchant/variant_options": {
+            "get": {
+                "description": "Get an attribute's options given attribute title or the option given its option name.",
+                "tags": [
+                    "Attribute"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        },
+        "/buyer/cart": {
+            "get": {
+                "description": "Get items in cart.",
+                "tags": [
+                    "Buyer"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            },
+            "post": {
+                "description": "Add an item to cart.",
+                "tags": [
+                    "Buyer"
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Cart"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an item quantity in cart.",
+                "tags": [
+                    "Buyer"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Cart"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete some quantity of a product in cart.",
+                "tags": [
+                    "Buyer"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Variant added!"
+                    },
+                    "409": {
+                        "description": "Variant exist!"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "jwt_auth": {
+                "description": "JWT auth",
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "bearer"
+            }
+        },
+        "parameters": {
+            "productProductIdPath": {
+                "in": "path",
+                "name": "productId",
+                "schema": {
+                    "type": "string"
+                },
+                "required": true,
+                "description": "Product Id"
+            },
+            "attributeTitleParam": {
+                "name": "title",
+                "in": "query",
+                "description": "Attribute's title. e.g variant_options",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "attributeOptionNameParam": {
+                "name": "name",
+                "in": "query",
+                "description": "Attribute's option name. e.g size",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "attributeOptionValueParam": {
+                "name": "value",
+                "in": "query",
+                "description": "Attribute's option value. e.g x",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "userDetailSelectParam": {
+                "name": "select",
+                "in": "query",
+                "description": "Returnable fields are profile/contact/location/company/bank/store",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "style": "form"
+            },
+            "productDetailSelectParam": {
+                "name": "select",
+                "in": "query",
+                "description": "Returnable fields are pricing/stock/category/brief/detail",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                },
+                "style": "form"
+            },
+            "productNameParam": {
+                "description": "Search product based on name.",
+                "in": "query",
+                "name": "name",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "productPriceLowParam": {
+                "description": "Search product price lower than.",
+                "in": "query",
+                "name": "low",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "productPriceHighParam": {
+                "description": "Search product price higher than.",
+                "in": "query",
+                "name": "high",
+                "schema": {
+                    "type": "integer"
+                }
+            },
+            "productCategoryParam": {
+                "description": "Search product based on category.",
+                "in": "query",
+                "name": "category",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "productPriceStatusParam": {
+                "description": "Search product based on product status.",
+                "in": "query",
+                "name": "status",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "productProductIdParam": {
+                "description": "Product id.",
+                "in": "query",
+                "name": "product_id",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "productVariantIdParam": {
+                "description": "Variant Id.",
+                "in": "query",
+                "name": "variantId",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "pageParam": {
+                "description": "The number of items to skip before starting to collect the result set.",
+                "in": "query",
+                "name": "page",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "example": 1
+            },
+            "limitParam": {
+                "in": "query",
+                "name": "limit",
+                "required": true,
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                },
+                "example": 20,
+                "description": "The numbers of items to return"
+            }
+        },
+        "schemas": {
+            "Login": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "admin1@qq.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "User password",
+                        "example": "123123"
+                    },
+                    "user_group": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "User group merchant/buyer",
+                        "example": "buyer"
+                    }
+                }
+            },
+            "AttributeDetail": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Attribute title",
+                        "example": "variant_options"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Attribute option name",
+                        "example": "size"
+                    }
+                }
+            },
+            "Register": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "example": "admin@gstock.com",
+                        "type": "string"
+                    },
+                    "password": {
+                        "example": "poi098)(*",
+                        "type": "string"
+                    },
+                    "confirm_password": {
+                        "example": "poi098)(*",
+                        "type": "string"
+                    },
+                    "user_group": {
+                        "example": "buyer",
+                        "type": "string"
+                    }
+                }
+            },
+            "Forgot": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User email",
+                        "example": "admin1@qq.com"
+                    }
+                }
+            },
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "associate_to_website": {
+                        "type": "string"
+                    },
+                    "DOB": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "prefix": {
+                        "type": "string",
+                        "enum": [
+                            "Mr.",
+                            "Ms.",
+                            "Mrs.",
+                            "Dr."
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "middle_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "suffix": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "associate_to_website": "https://example.com",
+                    "DOB": "12-08-1997",
+                    "gender": "M",
+                    "prefix": "Mr.",
+                    "first_name": "Doe",
+                    "middle_name": "Jr.",
+                    "last_name": "John",
+                    "suffix": "GoodMan"
+                }
+            },
+            "Bank": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "holder_name": {
+                        "type": "string"
+                    },
+                    "account_no": {
+                        "type": "string"
+                    },
+                    "merchant_status": {
+                        "type": "string",
+                        "enum": [
+                            "Verified",
+                            "Not verified"
+                        ]
+                    }
+                },
+                "example": {
+                    "title": "John Doe Pte. Ltd.",
+                    "name": "DBS",
+                    "code": "908892",
+                    "holder_name": "John Doe",
+                    "account_no": "099-222-222",
+                    "merchant_status": "Verified"
+                }
+            },
+            "Company": {
+                "type": "object",
+                "properties": {
+                    "company_name": {
+                        "type": "string"
+                    },
+                    "person_charge": {
+                        "type": "string"
+                    },
+                    "reg_no": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "company_name": "John Doe Pte. Ltd.",
+                    "person_charge": "John Doe",
+                    "reg_no": "SG8777977"
+                }
+            },
+            "Contact": {
+                "type": "object",
+                "properties": {
+                    "email_for_contact": {
+                        "type": "string"
+                    },
+                    "mobile_no": {
+                        "type": "number"
+                    },
+                    "tel": {
+                        "type": "number"
+                    },
+                    "fax": {
+                        "type": "number"
+                    },
+                    "skype": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "email_for_contact": "JohnDoe@gmail.com",
+                    "mobile_no": "88772772",
+                    "tel": "88772772",
+                    "fax": "88772772",
+                    "skype": "JohnDoeSkkk"
+                }
+            },
+            "Location": {
+                "type": "object",
+                "properties": {
+                    "addressline1": {
+                        "type": "string"
+                    },
+                    "addressline2": {
+                        "type": "string"
+                    },
+                    "addressline3": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "state_province": {
+                        "type": "string"
+                    },
+                    "postal_code": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "addressline1": "xxxxx road",
+                    "addressline2": "ABC condo",
+                    "addressline3": "#08-12",
+                    "country": "Singapore",
+                    "state_province": "Singapore",
+                    "postal_code": "S877288"
+                }
+            },
+            "UserDetail": {
+                "type": "object",
+                "properties": {
+                    "profile": {
+                        "$ref": "#/components/schemas/Profile"
+                    },
+                    "bank": {
+                        "$ref": "#/components/schemas/Bank"
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
+                    },
+                    "contact": {
+                        "$ref": "#/components/schemas/Contact"
+                    },
+                    "location": {
+                        "$ref": "#/components/schemas/Location"
+                    }
+                }
+            },
+            "UserResetPassword": {
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "User new password",
+                        "example": "123123"
+                    },
+                    "confirm_password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "User confirm new password",
+                        "example": "123123"
+                    },
+                    "old_password": {
+                        "type": "string",
+                        "format": "string",
+                        "description": "User old password",
+                        "example": "qwer1234"
+                    }
+                }
+            },
+            "StartProductCreation": {
+                "description": "Starting product creation detail",
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BaseProduct": {
+                "description": "Product basic detail",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "$ref": "#/components/schemas/ProductDetail"
+                    },
+                    "brief": {
+                        "$ref": "#/components/schemas/ProductBrief"
+                    },
+                    "pricing": {
+                        "$ref": "#/components/schemas/ProductPricing"
+                    },
+                    "stock": {
+                        "$ref": "#/components/schemas/ProductStock"
+                    }
+                }
+            },
+            "ProductImagesName": {
+                "type": "object",
+                "properties": {
+                    "remove": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductDetail": {
+                "type": "object",
+                "properties": {
+                    "long_description": {
+                        "type": "string"
+                    },
+                    "product_brand": {
+                        "type": "string"
+                    },
+                    "barcode": {
+                        "type": "string"
+                    },
+                    "sku": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductPricing": {
+                "type": "object",
+                "properties": {
+                    "final_price": {
+                        "type": "number"
+                    },
+                    "min_price": {
+                        "type": "number"
+                    },
+                    "max_price": {
+                        "type": "number"
+                    },
+                    "discount_price": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ProductStock": {
+                "type": "object",
+                "properties": {
+                    "qty": {
+                        "type": "number"
+                    },
+                    "min_qty": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ProductBrief": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "short_description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "discount_price": {
+                        "type": "number"
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    }
+                }
+            },
+            "VariantDetail": {
+                "description": "Variant details.",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "flavor/size/color"
+                    },
+                    "value": {
+                        "type": "string",
+                        "example": "bitter/sweet/red"
+                    },
+                    "price": {
+                        "type": "number",
+                        "example": 4
+                    },
+                    "discount_price": {
+                        "type": "number",
+                        "example": 6
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "big.jpg"
+                    },
+                    "stock": {
+                        "type": "number",
+                        "example": 1230
+                    },
+                    "sku": {
+                        "type": "string",
+                        "example": "ASD - 1231"
+                    }
+                }
+            },
+            "Cart": {
+                "description": "Cart details.",
+                "type": "object",
+                "properties": {
+                    "product_id": {
+                        "type": "string"
+                    },
+                    "variant_id": {
+                        "type": "string"
+                    },
+                    "qty": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ProductVariantID": {
+                "description": "Cart details.",
+                "type": "object",
+                "properties": {
+                    "variant_id": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ProductID": {
+                "description": "Product id.",
+                "type": "object",
+                "properties": {
+                    "product_id": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

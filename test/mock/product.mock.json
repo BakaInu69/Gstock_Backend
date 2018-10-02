@@ -1,0 +1,56 @@
+[{
+        "is_active": true,
+        "status": "Approved",
+        "brief": {
+            "name": "Persimmons",
+            "stock": 20
+        },
+        "pricing": {
+            "discount_price": 25
+        }
+    },
+    {
+        "is_active": true,
+        "status": "Approved",
+        "brief": {
+            "name": "Pasta - Orecchiette",
+            "stock": 20
+        },
+        "pricing": {
+            "discount_price": 2
+        }
+    },
+    {
+        "is_active": true,
+        "status": "Approved",
+        "brief": {
+            "name": "Pastry - Apple Large",
+            "stock": 20
+        },
+        "pricing": {
+            "discount_price": 5
+        }
+    },
+    {
+        "is_active": true,
+        "status": "Approved",
+        "brief": {
+            "name": "Sandwich Wrap",
+            "stock": 20
+        },
+        "pricing": {
+            "discount_price": 8.9
+        }
+    },
+    {
+        "is_active": true,
+        "status": "Approved",
+        "brief": {
+            "name": "Sandwich Wrap",
+            "stock": 20
+        },
+        "pricing": {
+            "discount_price": 0.4
+        }
+    }
+]

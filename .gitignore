@@ -1,0 +1,42 @@
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+reverseproxy
+pids
+logs
+results
+tmp
+uploads
+#Build
+public/css/main.css
+
+# API keys and secrets
+.env
+.env.dev
+.env.test.docker
+scripts
+
+# Dependency directory
+node_modules
+bower_components
+
+# Editors
+.idea
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+dist
+*.pdf
+.dockerignore
+docker-compose.yml
+docker-compose_bak.yml
+dump

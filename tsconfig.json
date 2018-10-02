@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outDir": "dist",
+        "module": "commonjs",
+        "baseUrl": "/",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "typeRoots": [
+            "/node_modules/@types"
+        ],
+        "lib": [
+            "dom",
+            "es7"
+        ]
+    },
+    "include": [
+        "*",
+        "src/**/*"
+    ]
+}

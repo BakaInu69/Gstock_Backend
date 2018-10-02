@@ -1,0 +1,21 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".log",
+        ".git",
+        "node_modules/**/node_modules",
+        "src/**/*.spec.ts"
+    ],
+    "verbose": true,
+    "watch": [
+        "src/**/*.ts"
+    ],
+    "exec": "node --inspect -r ts-node/register ./src/server.ts",
+    "execMap": {
+        "js": "node --harmony"
+    },
+    "events": {
+        "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    },
+    "ext": "ts json log"
+}
